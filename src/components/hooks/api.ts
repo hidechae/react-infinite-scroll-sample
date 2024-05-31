@@ -47,7 +47,9 @@ export function useApiInfinite(limit: number = 10): {
     return `/api?offset=${pageIndex * limit}&limit=${limit}`;
   }, [limit]);
 
-  const {data, size, setSize, isLoading, isValidating} = useSWRInfinite<Response>(getKey, fetcher);
+  const {data, size, setSize, isLoading, isValidating} = useSWRInfinite<Response>(getKey, fetcher, {
+    revalidateFirstPage: false, // 2ページ目以降を読み込むとき毎回1ページ目を再検証
+  });
 
   return {
     data:      data ? data.flatMap((d) => d.items) : [],
